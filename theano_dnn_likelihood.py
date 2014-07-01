@@ -69,6 +69,14 @@ f_y = function([x], y)
 # Define the loss function.
 y_real = T.iscalar('y_real')  # The desired output vector.
 loss = -T.log(y[0][y_real])  # Negative log-likelihood.
+
+# Add regularization.
+gamma = theano.shared(1e-4)
+l2 = 0
+for w, b in params:
+    l2 += (w**2).sum() + (b**2).sum()
+loss += gamma * l2
+
 f_loss = function([x, y_real], loss, allow_input_downcast=True)
 
 # Derive the gradients for the parameters.

@@ -112,7 +112,7 @@ total_grad = T.sum(grads_matrix, axis=0)
 f_total_grad = function([X, true_y], total_grad)
 #print f_total_grad(data_x, data_y)
 
-natural_grad = T.tensordot(theano.sandbox.linalg.ops.matrix_inverse(fisher_matrix), total_grad, [[0], [0]])
+natural_grad = T.tensordot(total_grad, theano.sandbox.linalg.ops.matrix_inverse(fisher_matrix), [[0], [0]])
 f_natural_grad = function([X, true_y], natural_grad)
 
 
@@ -122,6 +122,7 @@ def f_natural_grad_parsed(dx, dy):
     for param in params:
         shape = param.shape.eval()
         res.append(ng[:np.prod(shape)].reshape(shape))
+        ng = ng[np.prod(shape):]
     
     return res
 

@@ -18,6 +18,8 @@ data = [
     ([-1, 1], 1),
     ([1, -1], 1),
 ]
+data = data * 1000
+
 data_x, data_y = zip(*data)
 
 
@@ -97,7 +99,7 @@ f_loss = function([X, true_y], total_loss)
 grads_matrix, updates = theano.scan(
         lambda i, y : (
                 T.concatenate([x.flatten() for x in T.grad(loss[i], params)]),
-        )  # Build a vector for each example, where the dimensions correspond to
+        ),  # Build a vector for each example, where the dimensions correspond to
            # the parameters of the whole model -- they are flattened
            # and concatenated.
         sequences=T.arange(loss.shape[0]),  # Iterates over this.
